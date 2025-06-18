@@ -179,7 +179,9 @@ class ReactionWheel:
         if packet_received is None:
             raise WheelError("Received an invalid SLIP frame.")
 
-        # 4. Validate the reply
+
+
+        # --- 4. Validate the reply ---
         # Separate the received packet into its body and CRC 
         if len(packet_received) < 5:
             raise WheelError(f"Reply packet is too short: {len(packet_received)} bytes.")
