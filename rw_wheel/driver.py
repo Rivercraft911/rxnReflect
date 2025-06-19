@@ -1,6 +1,6 @@
 # rw_wheel/driver.py
 """
-Core driver for the Sinclair Interplanetary RW4-12 Reaction Wheel.
+Core driver for the RW4-12 Reaction Wheel.
 
 This module implements the low-level Nanosatellite Protocol (NSP)
 as specified in the E400281 RW4-12 Software ICD document. It handles
