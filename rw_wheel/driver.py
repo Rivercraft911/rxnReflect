@@ -10,11 +10,12 @@ high-level API for controlling the wheel.
 Author: River Dowdy
 Date: June 2025
 """
-
+import math
 import struct
 import serial
 import crcmod
 import time
+import logging
 from enum import IntEnum
 
 # --- Protocol Constants (from E400281 Software ICD) ---
@@ -106,6 +107,7 @@ def _slip_decode(frame: bytes) -> bytes | None:
         i += 1
     return bytes(decoded)
 
+log = logging.getLogger(__name__)
 
 # The Main Driver Class
 class ReactionWheel:
@@ -169,6 +171,10 @@ class ReactionWheel:
         # 2. SLIP-encode and send
         frame_to_send = _slip_encode(full_packet)
         self.ser.write(frame_to_send)
+
+        # Debug logging
+        log.debug(f"TX > Raw packet: {full_packet.hex(' ')}")
+        log.debug(f"TX > SLIP-encoded frame: {frame_to_send.hex(' ')}")
         
         # 3. Wait for and decode the reply
         frame_received = self.ser.read_until(FEND.to_bytes(1, 'little'))
@@ -176,10 +182,13 @@ class ReactionWheel:
             raise WheelError("Timeout: No reply received from the wheel.")
             
         packet_received = _slip_decode(frame_received)
-        if packet_received is None:
+
+        # Log the received packet
+        if packet_received:
+            log.debug(f"RX < Raw packet: {packet_received.hex(' ')}")
+        else:
+            log.warning("Received an invalid SLIP frame.") # Use log.warning
             raise WheelError("Received an invalid SLIP frame.")
-
-
 
         # --- 4. Validate the reply ---
         # Separate the received packet into its body and CRC 

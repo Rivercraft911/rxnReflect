@@ -3,6 +3,9 @@ import os
 import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from logging_config import setup_logging
+setup_logging()
+
 from rw_wheel import ReactionWheel
 import config
 
