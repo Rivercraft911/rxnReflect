@@ -181,9 +181,11 @@ class ReactionWheel:
         if not frame_received:
             raise WheelError("Timeout: No reply received from the wheel.")
             
+        # Log the received frame
+        log.debug(f"RX < Received frame: {frame_received.hex(' ')}")
+        
         packet_received = _slip_decode(frame_received)
-
-        # Log the received packet
+        # Check and log the received packet
         if packet_received:
             log.debug(f"RX < Raw packet: {packet_received.hex(' ')}")
         else:
