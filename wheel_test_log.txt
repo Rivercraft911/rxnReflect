@@ -1,0 +1,4 @@
+2025-06-19 19:44:46,520 - rw_wheel.driver - DEBUG - TX > Raw packet: 01 11 80 ae 6b
+2025-06-19 19:44:46,520 - rw_wheel.driver - DEBUG - TX > SLIP-encoded frame: c0 01 11 80 ae 6b c0
+2025-06-19 19:44:47,523 - rw_wheel.driver - DEBUG - TX > Raw packet: 01 11 88 00 00 00 00 00 00 d3 81
+2025-06-19 19:44:47,523 - rw_wheel.driver - DEBUG - TX > SLIP-encoded frame: c0 01 11 88 00 00 00 00 00 00 d3 81 c0

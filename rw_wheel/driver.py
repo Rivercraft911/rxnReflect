@@ -29,7 +29,7 @@ TFESC = 0xDD # Transposed Frame Escape
 # CRC-16/CCITT-FALSE (ICD 5.7)
 # The C-code example in the datasheet implies a reflected (LSB-first)
 # algorithm. 'rev=True' in crcmod handles this.
-crc_func = crcmod.Crc(0x11021, initCrc=0xFFFF, rev=True, xorOut=0x0000)
+crc_func = crcmod.mkCrcFun(0x11021, initCrc=0xFFFF, rev=True, xorOut=0x0000)
 
 # NSP Commands (ICD 6.3, Table 5)
 class NSPCommand(IntEnum):
