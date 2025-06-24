@@ -29,7 +29,7 @@ TFESC = 0xDD # Transposed Frame Escape
 # CRC-16/CCITT-FALSE (ICD 5.7)
 # The C-code example in the datasheet implies a reflected (LSB-first)
 # algorithm. 'rev=True' in crcmod handles this.
-crc_func = crcmod.mkCrcFun(0x11021, initCrc=0xFFFF, rev=True, xorOut=0x0000)
+_crc_func = crcmod.mkCrcFun(0x11021, initCrc=0xFFFF, rev=True, xorOut=0x0000)
 
 # NSP Commands (ICD 6.3, Table 5)
 class NSPCommand(IntEnum):
@@ -165,11 +165,18 @@ class ReactionWheel:
             '<BB', self.wheel_addr, self.host_addr
         ) + control_byte.to_bytes(1, 'little') + payload
         
-        crc = crc_func(packet_body).to_bytes(2, 'little')
+        crc = _crc_func(packet_body).to_bytes(2, 'little')
         full_packet = packet_body + crc
         
-        # 2. SLIP-encode and send
+        # 2. SLIP-encode
         frame_to_send = _slip_encode(full_packet)
+
+        # preamble to  ensure the wheel is ready to receive
+        preamble = b'\x00\x00'
+        self.ser.write(preamble)
+    
+        # Delay to ensure the preamble is sent before the real frame
+        time.sleep(0.01) 
         self.ser.write(frame_to_send)
 
         # Debug logging
@@ -201,7 +208,7 @@ class ReactionWheel:
         received_crc = packet_received[-2:]
         
         # Check CRC
-        calculated_crc = crc_func(received_body).to_bytes(2, 'little')
+        calculated_crc = _crc_func(received_body).to_bytes(2, 'little')
         if received_crc != calculated_crc:
             raise WheelCrcError(f"CRC mismatch! Got {received_crc.hex()}, expected {calculated_crc.hex()}")
         

@@ -1,4 +1,25 @@
-2025-06-19 19:44:46,520 - rw_wheel.driver - DEBUG - TX > Raw packet: 01 11 80 ae 6b
-2025-06-19 19:44:46,520 - rw_wheel.driver - DEBUG - TX > SLIP-encoded frame: c0 01 11 80 ae 6b c0
-2025-06-19 19:44:47,523 - rw_wheel.driver - DEBUG - TX > Raw packet: 01 11 88 00 00 00 00 00 00 d3 81
-2025-06-19 19:44:47,523 - rw_wheel.driver - DEBUG - TX > SLIP-encoded frame: c0 01 11 88 00 00 00 00 00 00 d3 81 c0
+2025-06-24 10:45:14,645 - __main__ - INFO - [Device Sim] Starting device simulator thread.
+2025-06-24 10:45:14,648 - __main__ - INFO - [Device Sim] Opened port /dev/cu.usbserial-B00320NW to act as wheel.
+2025-06-24 10:45:16,649 - __main__ - INFO - [Host] Starting host test.
+2025-06-24 10:45:16,656 - rw_wheel.driver - DEBUG - TX > Raw packet: 01 02 80 57 d4
+2025-06-24 10:45:16,656 - rw_wheel.driver - DEBUG - TX > SLIP-encoded frame: c0 01 02 80 57 d4 c0
+2025-06-24 10:45:16,662 - __main__ - DEBUG - [Device Sim] RX < Received frame: c0
+2025-06-24 10:45:16,662 - __main__ - WARNING - [Device Sim] Decoded invalid packet: b''
+2025-06-24 10:45:16,678 - __main__ - DEBUG - [Device Sim] RX < Received frame: 01 02 80 57 d4 c0
+2025-06-24 10:45:16,678 - __main__ - WARNING - [Device Sim] Decoded invalid packet: None
+2025-06-24 10:45:17,658 - rw_wheel.driver - DEBUG - TX > Raw packet: 01 02 88 00 00 00 00 00 00 7b 50
+2025-06-24 10:45:17,658 - rw_wheel.driver - DEBUG - TX > SLIP-encoded frame: c0 01 02 88 00 00 00 00 00 00 7b 50 c0
+2025-06-24 10:45:17,663 - __main__ - DEBUG - [Device Sim] RX < Received frame: c0
+2025-06-24 10:45:17,663 - __main__ - WARNING - [Device Sim] Decoded invalid packet: b''
+2025-06-24 10:45:17,679 - __main__ - DEBUG - [Device Sim] RX < Received frame: 01 02 88 00 00 00 00 00 00 7b 50 c0
+2025-06-24 10:45:17,679 - __main__ - WARNING - [Device Sim] Decoded invalid packet: None
+2025-06-24 10:45:19,168 - __main__ - CRITICAL - [Host] Test failed: Timeout: No reply received from the wheel.
+Traceback (most recent call last):
+  File "/Users/river/Documents/github/rxnReflect/tests/test_00_adapter_to_adapter.py", line 101, in host_test
+    response_str = host_wheel.ping()
+  File "/Users/river/Documents/github/rxnReflect/rw_wheel/driver.py", line 224, in ping
+    reply_payload = self._send_and_receive(NSPCommand.PING)
+  File "/Users/river/Documents/github/rxnReflect/rw_wheel/driver.py", line 182, in _send_and_receive
+    raise WheelError("Timeout: No reply received from the wheel.")
+rw_wheel.driver.WheelError: Timeout: No reply received from the wheel.
+2025-06-24 10:45:19,809 - __main__ - INFO - [Device Sim] Thread finished.

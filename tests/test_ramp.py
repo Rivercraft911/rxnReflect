@@ -15,7 +15,7 @@ import config
 # Constants
 
 MAX_SAFE_RPM = 5252  # A safe maximum RPM for the ramp test
-
+#add incremntal speed adjusts later
 
 print("--- Test 4: Ramp ---")
 print("!!! WARNING: This test will command the motor to move. !!!")
@@ -44,13 +44,13 @@ try:
             rpm = (i / 100.0) * MAX_SAFE_RPM
             print(f"Ramping up to {rpm:.2f} RPM...")
             wheel.set_speed_rpm(rpm)
-            time.sleep(1)
+            time.sleep(2)
         print("Reached target speed. Now ramping down to IDLE...")
-        for i in range(speed_percent, -1, -10):
+        for i in range(speed_percent, 0, -10):
             rpm = (i / 100.0) * MAX_SAFE_RPM
             print(f"Ramping down to {rpm:.2f} RPM...")
             wheel.set_speed_rpm(rpm)
-            time.sleep(1)
+            time.sleep(2)
         print("Motor has stopped. Setting to IDLE state...")
 
 
