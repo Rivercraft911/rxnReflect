@@ -184,7 +184,8 @@ class ReactionWheel:
         frame_received = self.ser.read_until(FEND.to_bytes(1, 'little'))
         if not frame_received:
             raise WheelError("Timeout: No reply received from the wheel.")
-            
+        
+        
         # Log the received frame
         log.debug(f"RX < Received frame: {frame_received.hex(' ')}")
         

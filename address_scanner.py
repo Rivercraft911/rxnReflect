@@ -28,7 +28,7 @@ try:
     )
     wheel.open()
 
-    wheel.ser.timeout = 0.2
+    wheel.ser.timeout = 0.1
 
     # 4. Loop through all possible 8-bit addresses
     for address_to_test in range(256): # covers 0x00 to 0xFF
