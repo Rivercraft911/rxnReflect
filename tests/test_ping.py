@@ -14,8 +14,6 @@ print("This script will attempt to ping the reaction wheel.")
 print("If successful, it means wiring and basic communication are working.\n")
 
 try:
-    # The 'with' statement automatically opens and closes the connection,
-    # and ensures the wheel is left in a safe state.
     with ReactionWheel(
         port=config.SERIAL_PORT,
         baud=config.BAUD_RATE,

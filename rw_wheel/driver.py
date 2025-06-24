@@ -76,7 +76,11 @@ class WheelNackError(WheelError):
 
 # SLIP Encoding/Decoding Helper Functions
 def _slip_encode(data: bytes) -> bytes:
+
+    #Note to self: Remove After Testing
+    # out = bytearray([FEND, FEND, FEND, FEND])
     out = bytearray([FEND])
+    
     for byte in data:
         if byte == FEND:
             out.extend([FESC, TFEND])
@@ -168,15 +172,8 @@ class ReactionWheel:
         crc = _crc_func(packet_body).to_bytes(2, 'little')
         full_packet = packet_body + crc
         
-        # 2. SLIP-encode
+        # 2. SLIP-encode and send
         frame_to_send = _slip_encode(full_packet)
-
-        # preamble to  ensure the wheel is ready to receive
-        preamble = b'\x00\x00'
-        self.ser.write(preamble)
-    
-        # Delay to ensure the preamble is sent before the real frame
-        time.sleep(0.01) 
         self.ser.write(frame_to_send)
 
         # Debug logging
@@ -223,6 +220,27 @@ class ReactionWheel:
 
 
     # High-Level API
+
+    def initialize_application(self):
+        """
+        Sends the INIT command to transition the wheel from bootloader
+        to application mode..
+        """
+        log.info("Sending INIT command to start application firmware...")
+        
+        start_address = 0x20050000
+        payload = struct.pack('<I', start_address) # '<I' is 4-byte unsigned int, little-endian
+        
+        original_timeout = self.ser.timeout
+        self.ser.timeout = 3.0 # Give it 3 seconds to reply
+        
+        try:
+            self._send_and_receive(NSPCommand.INIT, payload)
+            log.info("INIT command successful. Wheel should now be in Application Mode.")
+        finally:
+            #restore the original timeout
+            self.ser.timeout = original_timeout
+
     def ping(self) -> str:
         """
         Sends a PING command to the wheel.
@@ -256,10 +274,12 @@ class ReactionWheel:
         """Commands the wheel to a specific speed in revolutions per minute."""
         print(f"Commanding wheel to SPEED mode at {rpm:.1f} RPM...")
         # Convert RPM to rad/s for the wheel's firmware
-        omega_rad_s = rpm * (2.0 * math.pi / 60.0)
+        rad_s = rpm * (2.0 * math.pi / 60.0)
         
         payload = struct.pack(
-            '<BBf', EDACFile.COMMAND_VALUE, WheelMode.SPEED, omega_rad_s
+            '<BBf', EDACFile.COMMAND_VALUE, WheelMode.SPEED, rad_s
         )
         self._send_and_receive(NSPCommand.WRITE_FILE, payload)
         print("SPEED command sent successfully.")
+
+    
