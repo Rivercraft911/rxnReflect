@@ -181,10 +181,22 @@ class ReactionWheel:
         log.debug(f"TX > SLIP-encoded frame: {frame_to_send.hex(' ')}")
         
         # 3. Wait for and decode the reply
-        frame_received = self.ser.read_until(FEND.to_bytes(1, 'little'))
-        if not frame_received:
-            raise WheelError("Timeout: No reply received from the wheel.")
-        
+        start_time = time.time()
+        frame_received = bytearray()
+
+        while time.time() - start_time < 1.0:      # 1‑s overall timeout
+            byte = self.ser.read(1)
+            if not byte:
+                continue
+            frame_received += byte
+            if byte[0] == FEND and len(frame_received) > 1:
+                # got a closing FEND and non‑empty body → candidate frame
+                packet_received = _slip_decode(frame_received)
+                if packet_received is not None:     # valid SLIP
+                    break
+                frame_received = bytearray()        # else keep hunting
+        else:
+            raise WheelError("Timeout: No valid SLIP frame received.")
         
         # Log the received frame
         log.debug(f"RX < Received frame: {frame_received.hex(' ')}")
