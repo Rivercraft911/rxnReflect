@@ -7,7 +7,7 @@ from logging_config import setup_logging
 setup_logging()
 
 from rw_wheel import ReactionWheel
-import config
+import rw_wheel.config as config
 
 print("--- Test 3: Safe Low-Speed Spin ---")
 print("!!! WARNING: This test will command the motor to move. !!!")

@@ -13,30 +13,10 @@ The implementation is based on the **E400281 RW4-12 Software ICD** document.
 
 ## Hardware Requirements
 
-*   Raspberry Pi (3B+ or newer recommended)
-*   Waveshare RS485 CAN HAT (or equivalent)
+*   Waveshare RS485 adapter (or equivalent)
 *   A stable power supply (28V DC recommended)
-*   Cabling to connect the RS485 HAT to the wheel's Glenair connector.
+*   Cabling to connect RS485 interface to the wheel's Glenair connector.
 
-## Installation
-
-1.  **Clone the Repository:**
-    ```bash
-    git clone <your-repo-url>
-    cd rw4-12-controller
-    ```
-
-2.  **Set up a Python Virtual Environment:** (Highly Recommended)
-    ```bash
-    python -m venv venv
-    source venv/bin/activate
-    ```
-    *On Windows, use `venv\Scripts\activate`*
-
-3.  **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
 
 ## How to Use
 
@@ -51,17 +31,17 @@ The implementation is based on the **E400281 RW4-12 Software ICD** document.
     *   **Test 1: Ping (Communication Check)**
         This is the most important first step. It does not move the motor.
         ```bash
-        python tests/test_01_ping.py
+        python tests/test_ping.py
         ```
 
     *   **Test 2: Read Telemetry**
         This test reads the bus voltage from the wheel.
         ```bash
-        python tests/test_02_read_telemetry.py
+        python tests/test_read_telemetry.py
         ```
 
     *   **Test 3: Safe Spin**
         **WARNING:** This test will move the motor. It spins the wheel at a very low speed and then commands it to stop.
         ```bash
-        python tests/test_03_spin_safe.py
+        python tests/test_safe_spin.py
         ```

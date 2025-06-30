@@ -6,7 +6,7 @@ from logging_config import setup_logging
 setup_logging()
 
 from rw_wheel import ReactionWheel
-import config
+import rw_wheel.config as config
 
 print("--- Test 2: Read Telemetry ---")
 print("This script will attempt to read the bus voltage from the wheel.\n")

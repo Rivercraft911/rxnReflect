@@ -5,7 +5,7 @@ import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from logging_config import setup_logging
-import config
+import rw_wheel.config as config
 from rw_wheel import ReactionWheel, WheelError
 
 setup_logging()
