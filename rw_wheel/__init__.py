@@ -1,7 +1,6 @@
 """
 Reaction Wheel Driver Package.
 
-This package provides the ReactionWheel class for communicating with the RW4-12.
 """
 
 from .driver import (

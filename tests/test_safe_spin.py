@@ -13,7 +13,6 @@ print("--- Test 3: Safe Low-Speed Spin ---")
 print("!!! WARNING: This test will command the motor to move. !!!")
 print("The wheel will spin at a very low speed (30 RPM) for 5 seconds, then stop.\n")
 
-# Give the user a chance to back out
 response = input("Are you sure you want to proceed? (yes/no): ")
 if response.lower() != 'yes':
     print("Test aborted by user.")

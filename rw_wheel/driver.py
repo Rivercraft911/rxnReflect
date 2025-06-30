@@ -50,7 +50,7 @@ class WheelMode(IntEnum):
     SPEED = 0x03
     TORQUE = 0x12
     MOMENTUM = 0x11
-    #add more later if needed
+    #add more later 
 
 # EDAC Memory File Addresses (ICD 7.4, Table 9)
 class EDACFile(IntEnum):
@@ -59,7 +59,7 @@ class EDACFile(IntEnum):
     SPEED = 0x15
     MOMENTUM = 0x16
     TORQUE = 0x12
-    # Add other telemetry files if needed
+    #add more later
 
 # --- Custom Exceptions for Error Handling ---
 class WheelError(Exception):
@@ -113,7 +113,7 @@ def _slip_decode(frame: bytes) -> bytes | None:
 
 log = logging.getLogger(__name__)
 
-# The Main Driver Class
+# --- The Main Driver Class ---
 class ReactionWheel:
     def __init__(self, port, baud, wheel_addr, host_addr):
         self.port = port
@@ -232,7 +232,7 @@ class ReactionWheel:
         return received_body[3:] # Everything after [DST][SRC][CTRL]
 
 
-    # High-Level API
+    # --- High-Level API ---
 
     def initialize_application(self):
         """

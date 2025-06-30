@@ -11,7 +11,7 @@ from rw_wheel import ReactionWheel, WheelError
 setup_logging()
 log = logging.getLogger(__name__)
 
-print("--- Test: Initialize Wheel to Application Mode ---")
+print("--- Test 0 : Initialize Wheel to Application Mode ---")
 print("This script will send the INIT command to start the main flight software.")
 
 try:
