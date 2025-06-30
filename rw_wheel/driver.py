@@ -54,11 +54,17 @@ class WheelMode(IntEnum):
 
 # EDAC Memory File Addresses (ICD 7.4, Table 9)
 class EDACFile(IntEnum):
-    COMMAND_VALUE = 0x00
-    VBUS = 0x03
-    SPEED = 0x15
-    MOMENTUM = 0x16
-    TORQUE = 0x12
+    COMMAND_VALUE = 0x00   
+    VBUS = 0x03   # primary bus voltage
+    VCC  = 0x08   # +3.3 V rail voltage
+    TEMP0 = 0x10
+    TEMP1 = 0x11 
+    TEMP2 = 0x12  
+    TEMP3 = 0x13   
+    SPEED = 0x15   
+    MOMENTUM = 0x16    
+    HALL_DIGITAL = 0x1B  
+    MEAUSURED_CURRENT = 0x1F 
     #add more later
 
 # --- Custom Exceptions for Error Handling ---
@@ -273,6 +279,30 @@ class ReactionWheel:
         if file_addr != EDACFile.VBUS:
             raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.VBUS}, got {file_addr}")
         return value
+    
+    def read_speed(self) -> float:
+        """Reads the current speed of the wheel in rad/s."""
+        print("Reading wheel speed...")
+        payload = EDACFile.SPEED.value.to_bytes(1, 'little')
+        
+        reply = self._send_and_receive(NSPCommand.READ_FILE, payload)
+        
+        file_addr, value = struct.unpack('<Bf', reply)
+        if file_addr != EDACFile.SPEED:
+            raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.SPEED}, got {file_addr}")
+        return value
+    
+    def read_momentum(self) -> float:
+        """Reads the current momentum of the wheel in kg*m^2/s."""
+        print("Reading wheel momentum...")
+        payload = EDACFile.MOMENTUM.value.to_bytes(1, 'little')
+        
+        reply = self._send_and_receive(NSPCommand.READ_FILE, payload)
+        
+        file_addr, value = struct.unpack('<Bf', reply)
+        if file_addr != EDACFile.MOMENTUM:
+            raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.MOMENTUM}, got {file_addr}")
+        return value
 
     def set_idle(self):
         """Commands the wheel to the safe IDLE mode."""
@@ -294,5 +324,62 @@ class ReactionWheel:
         )
         self._send_and_receive(NSPCommand.WRITE_FILE, payload)
         print("SPEED command sent successfully.")
+
+    def set_torque(self, torque_nm: float):
+        """
+        Commands the wheel to TORQUE mode at the given torque (N·m).
+        """
+        print(f"Commanding wheel to TORQUE mode at {torque_nm:.3f} N·m...")
+        payload = struct.pack(
+            '<BBf',
+            EDACFile.COMMAND_VALUE,      # file 0 = command value
+            WheelMode.TORQUE,            # TORQUE mode = 0x12
+            torque_nm                    # desired torque
+        )
+        self._send_and_receive(NSPCommand.WRITE_FILE, payload)
+        print("TORQUE command sent successfully.")
+
+    def set_momentum(self, momentum_nms: float):
+        """
+        Commands the wheel to MOMENTUM mode at the given angular momentum (N·m·s).
+        """
+        print(f"Commanding wheel to MOMENTUM mode at {momentum_nms:.3f} N·m·s...")
+        payload = struct.pack(
+            '<BBf',
+            EDACFile.COMMAND_VALUE,
+            WheelMode.MOMENTUM,          # MOMENTUM mode = 0x11
+            momentum_nms
+        )
+        self._send_and_receive(NSPCommand.WRITE_FILE, payload)
+        print("MOMENTUM command sent successfully.")
+
+    def read_vcc(self) -> float:
+        """
+        Reads the secondary 3.3 V rail voltage (VCC).
+        """
+        print("Reading 3.3 V rail voltage (VCC)...")
+        payload = EDACFile.VCC.value.to_bytes(1, 'little')
+        reply = self._send_and_receive(NSPCommand.READ_FILE, payload)
+        file_addr, value = struct.unpack('<Bf', reply)
+        if file_addr != EDACFile.VCC:
+            raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.VCC}, got {file_addr}")
+        return value
+
+    def read_temperature(self, sensor_index: int) -> float:
+        """
+        Reads one of the four NTC thermistor temperatures in °C.
+        sensor_index must be in 0..3 (TEMP0 through TEMP3).
+        """
+        if not 0 <= sensor_index <= 3:
+            raise ValueError("sensor_index must be between 0 and 3")
+        # EDACFile values for TEMP0..TEMP3 are 0x10..0x13
+        temp_file = EDACFile(0x10 + sensor_index)
+        print(f"Reading temperature TEMP{sensor_index}...")
+        payload = temp_file.value.to_bytes(1, 'little')
+        reply = self._send_and_receive(NSPCommand.READ_FILE, payload)
+        file_addr, value = struct.unpack('<Bf', reply)
+        if file_addr != temp_file:
+            raise WheelError(f"Wheel replied with wrong file! Expected {temp_file}, got {file_addr}")
+        return value
 
     

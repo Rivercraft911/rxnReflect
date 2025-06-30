@@ -11,7 +11,6 @@ import rw_wheel.config as config
 
 print("--- Test 1: PING Communication Check ---")
 print("This script will attempt to ping the reaction wheel.")
-print("If successful, it means wiring and basic communication are working.\n")
 
 try:
     with ReactionWheel(
