@@ -24,7 +24,6 @@ print(f"Torque to be applied: {MAX_TORQUE:.3f} N·m for {TEST_DURATION_S} second
 
 response = input("Are you sure you want to proceed? (yes/no): ")
 if response.lower() != 'yes':
-    print("Test aborted by user.")
     sys.exit()
 
 try:
@@ -38,7 +37,6 @@ try:
     ) as wheel:
         
         print("\nConnecting to wheel...")
-        # Ensure wheel is in a known, safe state before starting the test
         print("Putting wheel in IDLE mode before test...")
         wheel.set_idle()
         time.sleep(0.5) # Give a moment for the command to take effect
