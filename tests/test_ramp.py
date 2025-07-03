@@ -14,7 +14,8 @@ import rw_wheel.config as config
 
 # Constants
 
-MAX_SAFE_RPM = 5252  # A safe maximum RPM for the ramp test
+#MAX_SAFE_RPM = 5252
+MAX_SAFE_RPM = 1000
 #add incremntal speed adjusts later
 
 print("--- Test 4: Ramp ---")
@@ -40,13 +41,13 @@ try:
         host_addr=config.HOST_ADDRESS
     ) as wheel:
         
-        for i in range(0, speed_percent + 1, 10):
+        for i in range(0, speed_percent + 1, 5):
             rpm = (i / 100.0) * MAX_SAFE_RPM
             print(f"Ramping up to {rpm:.2f} RPM...")
             wheel.set_speed_rpm(rpm)
             time.sleep(2)
         print("Reached target speed. Now ramping down to IDLE...")
-        for i in range(speed_percent, 0, -10):
+        for i in range(speed_percent, 0, -5):
             rpm = (i / 100.0) * MAX_SAFE_RPM
             print(f"Ramping down to {rpm:.2f} RPM...")
             wheel.set_speed_rpm(rpm)

@@ -13,7 +13,7 @@ import rw_wheel.config as config
 
 # --- Test Parameters ---
 
-MAX_TORQUE = 1  # Maximum testing torque in N·m
+MAX_TORQUE = .05  # Maximum testing torque in N·m
 TEST_DURATION_S = 1 
 
 print("--- Test 5: Max Torque Check ---")

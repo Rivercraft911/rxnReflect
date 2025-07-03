@@ -57,14 +57,16 @@ class EDACFile(IntEnum):
     COMMAND_VALUE = 0x00   
     VBUS = 0x03   # primary bus voltage
     VCC  = 0x08   # +3.3 V rail voltage
+    MEAUSURED_CURRENT = 0x1F
     TEMP0 = 0x10
     TEMP1 = 0x11 
     TEMP2 = 0x12  
     TEMP3 = 0x13   
     SPEED = 0x15   
-    MOMENTUM = 0x16    
+    MOMENTUM = 0x16
+    INERTIA = 0x28    
     HALL_DIGITAL = 0x1B  
-    MEAUSURED_CURRENT = 0x1F 
+     
     #add more later
 
 # --- Custom Exceptions for Error Handling ---
@@ -302,6 +304,28 @@ class ReactionWheel:
         file_addr, value = struct.unpack('<Bf', reply)
         if file_addr != EDACFile.MOMENTUM:
             raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.MOMENTUM}, got {file_addr}")
+        return value
+    
+    def read_current(self) -> float:
+        """Reads the measured motor coil current in Amps."""
+        print("Reading measured current...")
+        payload = EDACFile.MEAUSURED_CURRENT.value.to_bytes(1, 'little')
+        reply = self._send_and_receive(NSPCommand.READ_FILE, payload)
+        file_addr, value = struct.unpack('<Bf', reply)
+        if file_addr != EDACFile.MEAUSURED_CURRENT:
+            raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.MEAUSURED_CURRENT}, got {file_addr}")
+        return value
+
+    def read_inertia(self) -> float:
+        """Reads the configured rotor inertia from the wheel in kg·m²."""
+        print("Reading configured rotor inertia...")
+        payload = EDACFile.INERTIA.value.to_bytes(1, 'little')
+        
+        reply = self._send_and_receive(NSPCommand.READ_FILE, payload)
+        
+        file_addr, value = struct.unpack('<Bf', reply)
+        if file_addr != EDACFile.INERTIA:
+            raise WheelError(f"Wheel replied with wrong file! Expected {EDACFile.INERTIA}, got {file_addr}")
         return value
 
     def set_idle(self):
