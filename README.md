@@ -33,14 +33,19 @@ The implementation is based on the **E400281 RW4-12 Software ICD** document.
         ```bash
         python tests/test_ping.py
         ```
-
-    *   **Test 2: Read Telemetry**
+    *   **Test 2: Initialize Wheel**
+        This test initializes the Wheel to Application Mode.
+        ```bash
+        python test_initial.py
+        ```
+        
+    *   **Test 3: Read Telemetry**
         This test reads the bus voltage from the wheel.
         ```bash
         python tests/test_read_telemetry.py
         ```
 
-    *   **Test 3: Safe Spin**
+    *   **Test 4: Safe Spin**
         **WARNING:** This test will move the motor. It spins the wheel at a very low speed and then commands it to stop.
         ```bash
         python tests/test_safe_spin.py
