@@ -2,7 +2,7 @@
 """
 Core driver for the RW4-12 Reaction Wheel.
 
-This module implements the low-level Nanosatellite Protocol (NSP)
+This file implements the low-level Nanosatellite Protocol (NSP)
 as specified in the E400281 RW4-12 Software ICD document. It handles
 SLIP framing, packet construction, CRC validation, and provides a
 high-level API for controlling the wheel.

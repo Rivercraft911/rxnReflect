@@ -27,8 +27,6 @@ if response.lower() != 'yes':
     sys.exit()
 
 try:
-    # The 'with' statement ensures the serial port is properly opened and
-    # closed, and that the wheel is commanded to a safe IDLE state on exit.
     with ReactionWheel(
         port=config.SERIAL_PORT,
         baud=config.BAUD_RATE,
@@ -39,31 +37,25 @@ try:
         print("\nConnecting to wheel...")
         print("Putting wheel in IDLE mode before test...")
         wheel.set_idle()
-        time.sleep(0.5) # Give a moment for the command to take effect
+        time.sleep(0.5) # Give it time to process the command
 
-        # 1. Read initial speed
         initial_speed = wheel.read_speed()
         print(f"Initial speed: {initial_speed:.2f} Rad/s")
         time.sleep(1)
 
-        # 2. Command max torque
         print(f"\n--> COMMANDING MAX TORQUE: {MAX_TORQUE:.3f} N·m")
         wheel.set_torque(MAX_TORQUE)
         
-        # 3. Hold torque and monitor speed to see acceleration
         print(f"Holding torque for {TEST_DURATION_S} seconds and monitoring speed...")
         for i in range(TEST_DURATION_S):
             time.sleep(1)
             current_speed = wheel.read_speed()
-            # Print the speed at each second to show it's accelerating
             print(f"  [t={i+1}s] Current Speed: {current_speed:.2f} Rad/s")
         
-        # 4. Command the wheel back to a safe state
         print("\n--> COMMANDING IDLE MODE")
         wheel.set_idle()
 
-        # 5. Check final state
-        time.sleep(1) # Wait for wheel to respond to IDLE command
+        time.sleep(1) 
         final_speed = wheel.read_speed()
         print(f"Final speed after commanding IDLE: {final_speed:.2f} Rad/s")
         

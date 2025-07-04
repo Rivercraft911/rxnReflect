@@ -13,8 +13,6 @@ from .driver import (
     EDACFile,
     
     
-    
-    #the low-level helpers needed ONLY for the loopback test
     _slip_encode,
     _slip_decode,
     _crc_func,

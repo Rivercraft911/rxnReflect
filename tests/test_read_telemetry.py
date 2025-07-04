@@ -36,10 +36,8 @@ try:
         for i in range(4):
             temp = wheel.read_temperature(i)
             temperatures.append(temp)
-            # A small delay between commands is good practice
             time.sleep(0.1) 
-            
-        # --- Print Results ---
+        
         print("\n--- Telemetry Readout SUCCESS ---")
         
         print("\n[ Electrical ]")

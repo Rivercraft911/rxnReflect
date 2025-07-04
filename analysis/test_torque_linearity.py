@@ -18,7 +18,7 @@ from logging_config import setup_logging
 # We will test a range of torque commands
 TORQUE_COMMANDS = np.linspace(-0.2, 0.2, 21) # From -0.2 to +0.2 Nm in 21 steps
 #TEST_DURATION_PER_STEP = 3.0 # How long to apply each torque command
-TEST_DURATION_PER_STEP = 2
+TEST_DURATION_PER_STEP = 3
 SAMPLE_INTERVAL = 0.05
 
 setup_logging()

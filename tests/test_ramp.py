@@ -22,7 +22,6 @@ print("--- Test 4: Ramp ---")
 print("!!! WARNING: This test will command the motor to move. !!!")
 print("The motor will start inert, then ramp up to a % of its max speed, and ramp back down to a stop.\n")
 
-# Give the user a chance to back out
 response = input("Are you sure you want to proceed? (yes/no): ")
 if response.lower() != 'yes':
     print("Test aborted by user.")
@@ -56,7 +55,7 @@ try:
 
 
         wheel.set_idle()
-        time.sleep(2) # Give it time to receive the command before closing
+        time.sleep(2) # Give it time to receive command
 
     print("\nSUCCESS! The safe spin test completed.")
 

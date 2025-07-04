@@ -27,9 +27,9 @@ try:
     ) as wheel:
         
         # Command a low speed
-        wheel.set_speed_rpm(100.0)
+        #wheel.set_speed_rpm(500.0)
+        wheel.set_speed_rpm(30.0)
         
-        # Let it spin for 5 seconds
         print("Wheel spinning. Waiting for 5 seconds...")
         time.sleep(5)
         
